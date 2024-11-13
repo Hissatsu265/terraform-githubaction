@@ -29,25 +29,33 @@ jobs:
         with:
           terraform_version: 1.9.8  # Phiên bản Terraform phù hợp với dự án của bạn
 
-      # Bước 4: Khởi tạo Terraform
+      # Bước 4: Cài đặt Checkov
+      - name: Install Checkov
+        run: pip install checkov
+
+      # Bước 5: Chạy Checkov để kiểm tra mã Terraform
+      - name: Run Checkov to scan Terraform files
+        run: checkov -d .  # Kiểm tra tất cả mã Terraform trong thư mục hiện tại
+
+      # Bước 6: Khởi tạo Terraform
       - name: Initialize Terraform
         run: terraform init
 
-      # Bước 5: Kiểm tra định dạng của mã Terraform
+      # Bước 7: Kiểm tra định dạng của mã Terraform
       - name: Format Terraform code
         run: terraform fmt -check
 
-      # Bước 6: Kiểm tra hợp lệ của mã Terraform
+      # Bước 8: Kiểm tra hợp lệ của mã Terraform
       - name: Validate Terraform code
         run: terraform validate
 
-      # Bước 7: Lập kế hoạch triển khai Terraform
+      # Bước 9: Lập kế hoạch triển khai Terraform
       - name: Plan Terraform
         env:
           AWS_REGION: us-west-2  # Đảm bảo sử dụng đúng `region`
         run: terraform plan -out=plan.tfplan
 
-      # Bước 8: Áp dụng mã Terraform chỉ khi có thay đổi trên nhánh main
+      # Bước 10: Áp dụng mã Terraform chỉ khi có thay đổi trên nhánh main
       - name: Apply Terraform (only on push to main)
         if: github.ref == 'refs/heads/main'
         env:
