@@ -20,7 +20,7 @@ module "security_groups" {
 
 module "ec2" {
   source             = "./modules/ec2"
-  ami_id             = "ami-005fc0f236362e99f"
+  ami_id             = "ami-066a7fbea5161f451"
   instance_type      = "t2.micro"
   public_subnet_id   = module.vpc.public_subnet_id
   private_subnet_id  = module.vpc.private_subnet_id
